@@ -1,0 +1,29 @@
+name: Build FriendsSMPPlugin (Maven)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests clean package
+
+      - name: Upload built JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: friends-smp-jar
+          path: target/*.jar
